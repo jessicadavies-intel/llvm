@@ -10,10 +10,11 @@ Joe Garvey, Intel +
 Roland Schulz, Intel +
 Ilya Burylov, Intel +
 Michael Kinsner, Intel +
-John Pennycook, Intel
+John Pennycook, Intel +
+Jessica Davies, Intel
 
 == Notice
-Copyright (c) 2019-2020 Intel Corporation.  All rights reserved.
+Copyright (c) 2019-2021 Intel Corporation.  All rights reserved.
 
 == Status
 
@@ -22,7 +23,7 @@ Working Draft - *DO NOT SHIP*
 == Version
 
 Built On: {docdate} +
-Revision: 1
+Revision: 2
 
 == Dependencies
 
@@ -49,7 +50,7 @@ Adding a new compile-time-constant property consists of adding a class for it (a
 
 This extension introduces two compile-time-constant properties: no_offset and no_alias. 
 no_offset indicates that the corresponding accessor will never contain an offset.  
-no_alias indicates that the corresponding accessor will not alias with any other accessor used in the kernel.  
+no_alias indicates that all modifications to the memory locations accessed (directly or indirectly) by this accessor, that occur during kernel execution, will be done through this accessor (directly or indirectly) and no other accessor or USM pointer in the kernel.
 
 === Examples
 Due to deduction guides, users should rarely need to specify the template parameters of property_list or accessor directly.  
@@ -387,7 +388,7 @@ Rewrite Table 4.50: Properties supported by the SYCL accessor class as follows, 
 | Property | Description | Compile-time Constant
 | property::noinit | The noinit property notifies the SYCL runtime that previous contents of a buffer can be discarded. Replaces deprecated discard_write and discard_read_write access modes. | No
 | property::no_offset | The no_offset property notifies the SYCL device compiler that the accessor will never contain an offset.  This may enable the compiler to make assumptions about the alignment of the accessor that it couldn't make otherwise. | Yes
-| property::no_alias | The no_alias property notifies the SYCL device compiler that the accessor will not alias with any other accessors or USM pointers accessed in the same kernel.  This is an unchecked assertion by the programmer and results in undefined behaviour if it is violated.  | Yes
+| property::no_alias | The no_alias property notifies the SYCL device compiler that all modifications to the memory locations accessed (directly or indirectly) by this accessor, that occur during kernel execution, will be done through this accessor (directly or indirectly) and no other accessor or USM pointer in the kernel.  This is an unchecked assertion by the programmer and results in undefined behaviour if it is violated.  | Yes
 |====
 --
 
@@ -408,5 +409,6 @@ Add two rows to Table 4.51: Constructors of the accessor property classes:
 [options="header"]
 |========================================
 |Rev|Date|Author|Changes
-|A|2020-06-18|Joe Garvey|Initial public draft
+|1|2020-06-18|Joe Garvey|Initial public draft
+|2|2021-01-28|Jessica Davies|Modify semantics of no_alias
 |======================================== 
