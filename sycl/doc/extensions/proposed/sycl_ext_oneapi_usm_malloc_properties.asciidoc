@@ -130,6 +130,16 @@ properties P1{alignment<512>};
 // APtr1 is of type annotated_ptr<int, decltype(properties{alignment<512>})>
 // The raw pointer of APtr1 is aligned to 512 bytes
 auto APtr1 = malloc_device<int>(N, q, P1);
+
+properties P2{alignment<1>};
+// Allocate N integers.
+// Alignment must be at least sizeof(int) bytes.
+auto APtr2 = malloc_device<int>(N, q, P2); // Error
+
+properties P3{alignment<64>};
+// Allocate 512 bytes.
+// Alignment must be at least 512 bytes.
+auto APtr3 = malloc_device(512, q, P3); // Exception
 ----
 
 == Specification
@@ -716,7 +726,7 @@ alignment
 If this property is present on an `annotated_ptr`, it indicates that the raw pointer has this alignment in bytes.
 If this property is passed to a USM memory allocation function with `properties` support, it instructs the runtime to allocate memory with this alignment in bytes.
 If the USM memory allocation function with `properties` support is templated on an allocation type `T` and the specified alignment is not suitable for an object of type `T` the compiler will issue a diagnostic error.
-If the USM memory allocation function with `properties` support is not templated on an allocation type `T`, and the specified alignment is not suitable for any object with fundamental alignment whose size is less than or equal to the requested allocation size, the USM memory allocation function with `properties` support will throw a synchronous exception with the `errc:invalid` error code.
+If the USM memory allocation function with `properties` support is not templated on an allocation type `T`, and the specified alignment is not suitable for objects with fundamental alignment whose size is less than or equal to the requested allocation size, the USM memory allocation function with `properties` support will throw a synchronous exception with the `errc:invalid` error code.
 |
 link:../proposed/sycl_ext_oneapi_annotated_ptr.asciidoc[sycl_ext_oneapi_annotated_ptr]
 |====
