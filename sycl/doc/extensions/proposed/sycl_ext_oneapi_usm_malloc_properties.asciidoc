@@ -713,8 +713,10 @@ Table <<table.usm.malloc.properties>> lists properties that affect the behavior 
 a|
 alignment
 | 	
-Instructs the runtime to allocate memory starting at an address with this alignment in bytes.
-The address of the raw pointer belonging to the `annotated_ptr` returned by the USM memory allocation function will have this alignment in bytes. +
+If this property is present on an `annotated_ptr`, it indicates that the raw pointer has this alignment in bytes.
+If this property is passed to a USM memory allocation function with `properties` support, it instructs the runtime to allocate memory with this alignment in bytes.
+If the USM memory allocation function with `properties` support is templated on an allocation type `T` and the specified alignment is not suitable for an object of type `T` the compiler will issue a diagnostic error.
+If the USM memory allocation function with `properties` support is not templated on an allocation type `T`, and the specified alignment is not suitable for any object with fundamental alignment whose size is less than or equal to the requested allocation size, the USM memory allocation function with `properties` support will throw a synchronous exception with the `errc:invalid` error code.
 |
 link:../proposed/sycl_ext_oneapi_annotated_ptr.asciidoc[sycl_ext_oneapi_annotated_ptr]
 |====
@@ -759,7 +761,7 @@ The following example shows how USM memory allocated using one of the functions 
 ----
 using namespace sycl::ext::oneapi::experimental;
 
-properties P1{alignment<64>};
+properties P1{alignment<512>};
 // APtr is of type annotated_ptr<int*, decltype(P1)>
 auto APtr = malloc_device<int>(N, q, P1);
 
