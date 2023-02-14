@@ -121,7 +121,7 @@ The `sycl::ext::intel::experimental::buffer_location` property is supported by `
 a|
 sycl::ext::intel::experimental::buffer_location<location>
 | 	
-`location` is an integer greater than zero. If `location` is less than or equal to zero, an error will be reported.
+`location` is an integer greater than or equal to zero. If `location` is negative, an error will be reported.
 
 If this property is on an `annotated_ptr` it indicates the memory pointed to by the raw pointer of the `annotated_ptr` is of type `location`. If the memory pointed to by the raw pointer of the `annotated_ptr` is not of this type, the behavior is undefined.
 
